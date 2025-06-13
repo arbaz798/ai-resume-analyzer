@@ -4,7 +4,9 @@
     "builder": "nixpacks"
   },
   "deploy": {
-    "startCommand": "gunicorn run:app",
-    "healthcheckPath": "/"
+    "startCommand": "gunicorn --bind 0.0.0.0:$PORT main:app",
+    "healthcheckPath": null,
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "never"
   }
 }
