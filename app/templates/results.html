@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+
+{% block title %}Resume Analysis Results{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.0.0/dist/chart.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Resume Analysis Results</h1>
+            <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-1"></i> Analyze Another Resume
+            </a>
+        </div>
+        <p class="text-muted">
+            <small>File: {{ filename }} | Analysis Date: {{ timestamp }}</small>
+        </p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center">
+                <h2 class="display-1 text-{{ 'success' if analysis.overall_score >= 70 else 'warning' if analysis.overall_score >= 50 else 'danger' }}">
+                    {{ analysis.overall_score }}
+                </h2>
+                <p class="lead">Overall Score</p>
+                
+                <hr>
+                
+                <div class="text-start">
+                    <h5 class="mb-3">Component Scores:</h5>
+                    {% for component, score in analysis.component_scores.items() %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>{{ component|replace('_', ' ')|title }}</span>
+                            <span class="fw-bold">{{ score|round(1) }}</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar {{ 'bg-success' if score >= 70 else 'bg-warning' if score >= 50 else 'bg-danger' }}" 
+                                 role="progressbar" style="width: {{ score }}%" 
+                                 aria-valuenow="{{ score }}" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="card-title h4 mb-4">Score Breakdown</h2>
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="accordion" id="feedbackAccordion">
+            {% for section in feedback.feedback_sections %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button {{ 'collapsed' if not loop.first }}" type="button" 
+                            data-bs-toggle="collapse" data-bs-target="#section{{ loop.index }}">
+                        {{ section.title }}
+                    </button>
+                </h2>
+                <div id="section{{ loop.index }}" class="accordion-collapse collapse {{ 'show' if loop.first }}" 
+                     data-bs-parent="#feedbackAccordion">
+                    <div class="accordion-body">
+                        <div class="alert alert-{{ 'success' if 'excellent' in section.summary.lower() or 'good' in section.summary.lower() else 'warning' if 'adequate' in section.summary.lower() else 'danger' }} mb-4">
+                            {{ section.summary }}
+                        </div>
+                        
+                        {% if section.details %}
+                        <h5 class="mt-4 mb-3">Details:</h5>
+                        <ul class="list-group mb-4">
+                            {% for detail in section.details %}
+                            <li class="list-group-item">{{ detail }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        
+                        {% if section.suggestions %}
+                        <h5 class="mb-3">Suggestions:</h5>
+                        <div class="list-group">
+                            {% for suggestion in section.suggestions %}
+                            <div class="list-group-item list-group-item-action">
+                                <i class="bi bi-lightbulb text-warning me-2"></i>
+                                {{ suggestion }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4 mb-3">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title">Want to improve your resume?</h4>
+                <p>Based on our analysis, we can suggest the following improvements to your resume:</p>
+                
+                <div class="accordion mb-3" id="improvementAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#languageImprovements">
+                                Language Improvements
+                            </button>
+                        </h2>
+                        <div id="languageImprovements" class="accordion-collapse collapse" data-bs-parent="#improvementAccordion">
+                            <div class="accordion-body">
+                                <p>We can replace weak and vague language with stronger alternatives:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card bg-light mb-2">
+                                            <div class="card-header text-muted">Before</div>
+                                            <div class="card-body">
+                                                <p class="mb-1">• I was <span class="text-danger">responsible for</span> managing a team</p>
+                                                <p class="mb-1">• <span class="text-danger">Helped with</span> the implementation</p>
+                                                <p class="mb-0">• <span class="text-danger">Good</span> communication skills</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card bg-light mb-2">
+                                            <div class="card-header text-muted">After</div>
+                                            <div class="card-body">
+                                                <p class="mb-1">• I <span class="text-success">managed</span> a team</p>
+                                                <p class="mb-1">• <span class="text-success">Contributed to</span> the implementation</p>
+                                                <p class="mb-0">• <span class="text-success">Exceptional</span> communication skills</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#actionVerbImprovements">
+                                Action Verb Enhancements
+                            </button>
+                        </h2>
+                        <div id="actionVerbImprovements" class="accordion-collapse collapse" data-bs-parent="#improvementAccordion">
+                            <div class="accordion-body">
+                                <p>We can add powerful action verbs to make your achievements stand out:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card bg-light mb-2">
+                                            <div class="card-header text-muted">Before</div>
+                                            <div class="card-body">
+                                                <p class="mb-1">• <span class="text-danger">I worked on</span> a major project</p>
+                                                <p class="mb-1">• <span class="text-danger">I was involved in</span> team leadership</p>
+                                                <p class="mb-0">• <span class="text-danger">I did</span> the quality assurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card bg-light mb-2">
+                                            <div class="card-header text-muted">After</div>
+                                            <div class="card-body">
+                                                <p class="mb-1">• <span class="text-success">I developed</span> a major project</p>
+                                                <p class="mb-1">• <span class="text-success">I collaborated on</span> team leadership</p>
+                                                <p class="mb-0">• <span class="text-success">I executed</span> the quality assurance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#keywordImprovements">
+                                Keyword Optimization
+                            </button>
+                        </h2>
+                        <div id="keywordImprovements" class="accordion-collapse collapse" data-bs-parent="#improvementAccordion">
+                            <div class="accordion-body">
+                                <p>We can optimize keywords for better ATS matching:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card bg-light mb-2">
+                                            <div class="card-header text-muted">Before</div>
+                                            <div class="card-body">
+                                                <p class="mb-1">• <span class="text-danger">Detail oriented</span> professional</p>
+                                                <p class="mb-1">• <span class="text-danger">Team player</span> with experience</p>
+                                                <p class="mb-0">• <span class="text-danger">Computer skills</span> include...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card bg-light mb-2">
+                                            <div class="card-header text-muted">After</div>
+                                            <div class="card-body">
+                                                <p class="mb-1">• <span class="text-success">Detail-focused</span> professional</p>
+                                                <p class="mb-1">• <span class="text-success">Collaborative team member</span> with experience</p>
+                                                <p class="mb-0">• <span class="text-success">Technical proficiencies</span> include...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="mb-0"><strong>Note:</strong> If you choose to automatically improve your resume, the document will maintain the original format (PDF, DOCX, or TXT) with all styling preserved.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12 text-center">
+        <button type="button" class="btn btn-primary btn-lg me-2" data-bs-toggle="modal" data-bs-target="#improveResumeModal">
+            <i class="bi bi-file-earmark-arrow-down"></i> Improve & Download Resume
+        </button>
+        <a href="javascript:window.print();" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-printer"></i> Print Results
+        </a>
+        <a href="{{ url_for('main.clear_session') }}" class="btn btn-outline-danger">
+            <i class="bi bi-trash"></i> Clear Data
+        </a>
+    </div>
+</div>
+
+<!-- Improve Resume Modal -->
+<div class="modal fade" id="improveResumeModal" tabindex="-1" aria-labelledby="improveResumeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="improveResumeModalLabel">Confirm Resume Improvements</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to apply these improvements to your resume?</p>
+                <p>Our AI will:</p>
+                <ul>
+                    <li>Replace weak language with stronger alternatives</li>
+                    <li>Add powerful action verbs</li>
+                    <li>Optimize keywords for better ATS matching</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{{ url_for('main.improve_resume_route') }}" class="btn btn-primary">
+                    Improve & Download
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.0/dist/chart.umd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get component scores for the chart
+        const scores = {{ analysis.component_scores|tojson }};
+        
+        // Prepare data for radar chart
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: Object.keys(scores).map(key => key.replace('_', ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase())),
+                datasets: [{
+                    label: 'Score',
+                    data: Object.values(scores),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pyc
+
+# Flask
+instance/
+.webassets-cache
+
+# Uploads
+uploads/
+*.pdf
+*.docx
+*.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+output.log
+
+# Database
+*.db
+*.sqlite3
+
+# Distribution
+dist/
+build/
+*.egg-info/

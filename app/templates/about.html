@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}About AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h1 class="mb-4">About AI Resume Analyzer</h1>
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Project Overview</h2>
+                <p>
+                    The AI-Powered Resume Analyzer is a web-based application designed to help job seekers improve their resumes
+                    using artificial intelligence and natural language processing (NLP) techniques. Our tool analyzes uploaded resumes
+                    and provides detailed, personalized feedback to increase your chances of landing job interviews.
+                </p>
+                
+                <h2 class="h4 mb-3 mt-4">How It Works</h2>
+                <div class="row g-4 mb-3">
+                    <div class="col-md-4 text-center">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-upload fs-2 text-primary"></i>
+                        </div>
+                        <h5>1. Upload</h5>
+                        <p class="text-muted">Upload your resume in PDF, DOCX, or TXT format</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-cpu fs-2 text-primary"></i>
+                        </div>
+                        <h5>2. Analyze</h5>
+                        <p class="text-muted">Our AI analyzes your resume using advanced NLP techniques</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-lightning fs-2 text-primary"></i>
+                        </div>
+                        <h5>3. Improve</h5>
+                        <p class="text-muted">Receive personalized feedback and suggestions for improvement</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Key Features</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush mb-4">
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>Grammar and Spelling Check</strong>
+                                <p class="text-muted mb-0 mt-1">Identifies grammar errors and typos that could hurt your credibility</p>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>Structure Analysis</strong>
+                                <p class="text-muted mb-0 mt-1">Evaluates the organization and formatting of your resume</p>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>Language Strength Evaluation</strong>
+                                <p class="text-muted mb-0 mt-1">Identifies weak phrases and suggests stronger alternatives</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush mb-4">
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>Keyword Optimization</strong>
+                                <p class="text-muted mb-0 mt-1">Checks for industry-relevant keywords that ATS systems look for</p>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>Comprehensive Scoring</strong>
+                                <p class="text-muted mb-0 mt-1">Provides an overall score and component scores to track improvements</p>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>Actionable Suggestions</strong>
+                                <p class="text-muted mb-0 mt-1">Offers specific recommendations to enhance your resume</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Technologies Used</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="mb-2">Core Technologies:</h5>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item">Python</li>
+                            <li class="list-group-item">Flask</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="mb-2">Libraries:</h5>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item">NLTK</li>
+                            <li class="list-group-item">SpaCy</li>
+                            <li class="list-group-item">LanguageTool</li>
+                            <li class="list-group-item">PyMuPDF</li>
+                            <li class="list-group-item">pdfminer.six</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

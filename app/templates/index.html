@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Resume Analyzer - Improve Your Resume{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-3">AI Resume Analyzer</h1>
+            <p class="lead">Upload your resume and get AI-powered feedback to increase your interview chances.</p>
+        </div>
+        
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('main.upload_resume') }}" enctype="multipart/form-data" class="p-3">
+                    <div class="mb-4 text-center">
+                        <div class="upload-area p-5 border rounded mb-3">
+                            <i class="bi bi-cloud-arrow-up display-4 text-primary mb-3"></i>
+                            <h5>Drag and drop your resume or use the button below</h5>
+                            <p class="text-muted small">Supported formats: PDF, DOCX, TXT (Max 5MB)</p>
+                            <div class="mt-3">
+                                <input type="file" name="resume" id="resume-upload" class="form-control" accept=".pdf,.docx,.txt" required>
+                            </div>
+                        </div>
+                        <div id="file-name" class="small text-success"></div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-lightning-charge-fill me-2"></i>Analyze Resume
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="mt-5">
+            <h2 class="h4 mb-4 text-center">What Our AI Resume Analyzer Provides:</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-check-circle-fill text-success display-6 mb-3"></i>
+                            <h3 class="h5">Grammar & Spelling Check</h3>
+                            <p class="text-muted">Identify and fix grammar and spelling errors to maintain professionalism.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-columns-gap text-primary display-6 mb-3"></i>
+                            <h3 class="h5">Structure Analysis</h3>
+                            <p class="text-muted">Evaluate the organization and formatting of your resume.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-chat-square-text text-info display-6 mb-3"></i>
+                            <h3 class="h5">Language Strength</h3>
+                            <p class="text-muted">Identify weak phrases and suggest stronger, more impactful alternatives.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-graph-up-arrow text-warning display-6 mb-3"></i>
+                            <h3 class="h5">Keyword Optimization</h3>
+                            <p class="text-muted">Ensure your resume contains key terms that match job descriptions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('resume-upload').addEventListener('change', function(e) {
+        let fileName = e.target.files[0]?.name || 'No file selected';
+        document.getElementById('file-name').textContent = 'Selected file: ' + fileName;
+    });
+</script>
+{% endblock %}
