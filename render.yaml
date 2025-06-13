@@ -1,0 +1,28 @@
+services:
+  # Web service for the Flask application
+  - type: web
+    name: resume-analyzer
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python -m spacy download en_core_web_sm
+      python -m nltk.downloader punkt stopwords wordnet
+    startCommand: gunicorn run:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    autoDeploy: true
+    healthCheckPath: /
+    # Free tier limits
+    plan: free
+    region: oregon
+    buildFilter:
+      paths:
+        - app/**
+        - requirements.txt
+        - run.py
+        - render.yaml
